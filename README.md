@@ -74,10 +74,12 @@ Be aware that the Job is set to run with `privileged: true`
 
 #### Deploy
 **IMPORTANT:** The Job deployed in K8s is not removed after completed, so you'll need to remove a deployed release before deploying again
+
+Example using the [values-example-1gb.yaml](docker-image-generator/values-example-1gb.yaml) as custom parameters
 ```bash
 # Deploy
 cd docker-image-generator
-helm upgrade --install data-gen -f values-1gb.yaml .
+helm upgrade --install data-gen -f values-example-1gb.yaml .
 
 # Remove once done
 helm delete --purge data-gen

@@ -79,7 +79,7 @@ Example using the [values-example-1gb.yaml](docker-image-generator/values-exampl
 ```bash
 # Deploy
 cd docker-image-generator
-helm upgrade --install data-gen -f values-example-1gb.yaml .
+helm install --name data-gen -f values-example-1gb.yaml .
 
 # Remove once done
 helm delete --purge data-gen

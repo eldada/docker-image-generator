@@ -1,0 +1,49 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Example for generating 100 Docker images with 10 layers of 100MB size, resulting in a 1GB Docker image.
+# All this is done in 10 parallel child processes.
+env:
+  # Number of Docker images to create
+  numberOfImages: 100
+
+  # Number of layers per image
+  numberOfLayers: 10
+
+  # Size of each layer (in KB)
+  sizeOfLayersKb: '102400'
+
+  # Number of upload threads
+  numOfThreads: 10
+
+  # Docker registry
+  dockerRegistry: docker.artifactory
+
+  # Set --insecure-registry=${DOCKER_REGISTRY} on the daemon
+  insecureRegistry: true
+
+  # Docker user
+  dockerUser:
+
+  # Docker password
+  dockerPassword:
+
+  # Directory path in the registry
+  repoPath: test-1gb
+
+  # Remove images once done
+  removeImages: true
+
+  # Image tag
+  tag: 1
+
+  # Debug output
+  debug: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    # cpu: 2
+    memory: 2Gi

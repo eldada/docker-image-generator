@@ -1,0 +1,59 @@
+# Default values for docker-image-generator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: eldada-docker-examples.bintray.io/docker-data-generator
+  tag: 0.9
+  pullPolicy: Always
+
+env:
+  # Number of Docker images to create
+  numberOfImages: 1
+
+  # Number of layers per image
+  numberOfLayers: 10
+
+  # Size of each layer (in KB)
+  sizeOfLayersKb: '1024'
+
+  # Number of upload threads
+  numOfThreads: 1
+
+  # Docker registry
+  dockerRegistry: docker.artifactory
+
+  # Setד --insecure-registry=${DOCKER_REGISTRY} on the daemon
+  insecureRegistry: true
+
+  # Docker user
+  dockerUser: admin
+
+  # Docker password
+  dockerPassword: password
+
+  # Directory path in the registry
+  repoPath: gen-test
+
+  # Remove images once done
+  removeImages: true
+
+  # Image tag
+  tag: 1
+
+  # Debug output
+  debug: false
+
+resources: {}
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+#  limits:
+#    cpu: 2
+#    memory: 2Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

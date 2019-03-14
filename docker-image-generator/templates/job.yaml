@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "docker-data-generator.fullname" . }}
+  labels:
+    app: {{ template "docker-data-generator.name" . }}
+    chart: {{ template "docker-data-generator.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "docker-data-generator.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: DOCKER_HOST
+          value: tcp://localhost:2375
+        - name: NUMBER_OF_IMAGES
+          value: '{{ .Values.env.numberOfImages }}'
+        - name: NUMBER_OF_LAYERS
+          value: '{{ .Values.env.numberOfLayers }}'
+        - name: SIZE_OF_LAYER_KB
+          value: '{{ .Values.env.sizeOfLayersKb }}'
+        - name: NUM_OF_THREADS
+          value: '{{ .Values.env.numOfThreads }}'
+        - name: DOCKER_REGISTRY
+          value: '{{ .Values.env.dockerRegistry }}'
+        - name: INSECURE_REGISTRY
+          value: '{{ .Values.env.insecureRegistry }}'
+        - name: DOCKER_USER
+          value: '{{ .Values.env.dockerUser }}'
+        - name: DOCKER_PASSWORD
+          value: '{{ .Values.env.dockerPassword }}'
+        - name: REPO_PATH
+          value: '{{ .Values.env.repoPath }}'
+        - name: REMOVE_IMAGES
+          value: '{{ .Values.env.removeImages }}'
+        - name: TAG
+          value: '{{ .Values.env.tag }}'
+        - name: DEBUG
+          value: '{{ .Values.env.debug }}'
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        securityContext:
+          privileged: true
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

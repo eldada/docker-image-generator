@@ -4,7 +4,7 @@
 
 image:
   repository: eldada-docker-examples.bintray.io/docker-data-generator
-  tag: 0.9
+  tag: 0.10
   pullPolicy: Always
 
 env:

@@ -68,6 +68,7 @@ if [ ${LOOP_SIZE} -gt 0 ]; then
         # Call the docker build script
         echo -e "\n\n[${a}/${LOOP_SIZE}] Preparing batch of ${NUM_OF_THREADS} images"
         for b in $(seq 1 ${NUM_OF_THREADS}); do
+            sleep 2
             /run-docker-build-and-push.sh ${b} &
         done
 

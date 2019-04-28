@@ -22,6 +22,7 @@ DOCKER_PASSWORD=${DOCKER_PASSWORD:-password}
 REPO_PATH=${REPO_PATH:-docker-auto}
 REMOVE_IMAGES=${REMOVE_IMAGES:-true}
 TAG=${TAG:-1}
+ERROR=false
 
 logger "==== Creating Docker image"
 
@@ -29,7 +30,7 @@ logger "==== Creating Docker image"
 GEN_ID=$(openssl rand -hex 4)
 
 # Build Docker image
-image_name_prefix=auto-generated
+image_name_prefix="generated-${NUMBER_OF_LAYERS}x${SIZE_OF_LAYER_KB}kb"
 image_name=${image_name_prefix}-${GEN_ID}-$(openssl rand -hex 16)
 logger "Image name: ${image_name}"
 
@@ -39,8 +40,19 @@ echo 'FROM scratch' > ${GEN_DIR}/Dockerfile
 # Create the files for the images
 for b in $(seq 1 ${NUMBER_OF_LAYERS}); do
     file_name=$(openssl rand -hex 16)
-    logger "Creating file ${file_name}"
-    dd if=/dev/urandom of=${GEN_DIR}/${file_name} bs=${SIZE_OF_LAYER_KB} count=1024 > /dev/null 2>&1
+    CMD="dd if=/dev/urandom of=${GEN_DIR}/${file_name} bs=${SIZE_OF_LAYER_KB} count=1024"
+    if [ "${DEBUG}" == true ]; then
+        logger "Command to run: ${CMD}"
+        ${CMD} || ERROR=true
+    else
+        ${CMD} > /dev/null 2>&1 || ERROR=true
+    fi
+    if [ "${ERROR}" == true ]; then
+        logger "ERROR: ${CMD} failed"
+        exit 1
+    fi
+    file_size=$(ls -l ${GEN_DIR}/${file_name} | awk '{print $5}')
+    logger "Created file ${file_name} (${file_size} bytes)"
     echo "COPY ${file_name} /files/" >> ${GEN_DIR}/Dockerfile
 done
 
@@ -51,9 +63,22 @@ fi
 
 # Build Docker image
 logger "Building image ${image_name}"
-docker build -t ${DOCKER_REGISTRY}/${REPO_PATH}/${image_name}:${TAG} ${GEN_DIR}/ > /dev/null 2>&1 || exit 1
+CMD="docker build -t ${DOCKER_REGISTRY}/${REPO_PATH}/${image_name}:${TAG} ${GEN_DIR}/"
+
+if [ "${DEBUG}" == true ]; then
+    logger "Command to run: ${CMD}"
+    ${CMD} || ERROR=true
+else
+    ${CMD} > /dev/null 2>&1 || ERROR=true
+fi
+
+if [ "${ERROR}" == true ]; then
+    logger "ERROR: ${CMD} failed"
+    exit 1
+fi
 
 # Cleanup
+logger "Removing temp directory"
 rm -rf ${GEN_DIR}
 
 if [ "${DEBUG}" == true ]; then
@@ -66,7 +91,13 @@ fi
 logger "Pushing Docker images"
 for a in $(docker images | grep ${image_name_prefix}-${GEN_ID} | awk '{print $1}'); do
     logger "Pushing ${a}:${TAG}"
-    docker push ${a}:${TAG} > /dev/null 2>&1
+    CMD="docker push ${a}:${TAG}"
+    if [ "${DEBUG}" == true ]; then
+        logger "Command to run: ${CMD}"
+        ${CMD} || ERROR=true
+    else
+        ${CMD} > /dev/null 2>&1 || ERROR=true
+    fi
 done
 
 if [ "${REMOVE_IMAGES}" == true ]; then
@@ -74,4 +105,7 @@ if [ "${REMOVE_IMAGES}" == true ]; then
     docker images | grep ${image_name_prefix}-${GEN_ID} | awk '{print $3}' | xargs docker rmi -f > /dev/null 2>&1
 fi
 
+if [ "${ERROR}" == true ]; then
+    logger "ERRORS found"
+fi
 logger "Completed"

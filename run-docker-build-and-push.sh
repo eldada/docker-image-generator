@@ -94,10 +94,8 @@ for a in $(docker images | grep ${image_name_prefix}-${GEN_ID} | awk '{print $1}
     CMD="docker push ${a}:${TAG}"
     if [ "${DEBUG}" == true ]; then
         logger "Command to run: ${CMD}"
-        ${CMD} || ERROR=true
-    else
-        ${CMD} > /dev/null 2>&1 || ERROR=true
     fi
+    ${CMD} || ERROR=true
 done
 
 if [ "${REMOVE_IMAGES}" == true ]; then

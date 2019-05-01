@@ -41,13 +41,13 @@ docker build -t ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG} .
 
 ### Run Docker container
 You can run the Docker container directly on your Docker enabled host (needs the `--privileged` to work).<br>
-You can use the already built image `eldada-docker-examples.bintray.io/docker-data-generator:0.10`
+You can use the already built image `eldada-docker-examples.bintray.io/docker-data-generator:0.11`
 ```bash
 # Example for creating 100 images with 10 layers 1MB each and uploading to docker.artifactory/test
 # in 3 parallel sub processes (the 100 images are slit between the processes).
 export REGISTRY=eldada-docker-examples.bintray.io
 export REPOSITORY=docker-data-generator
-export IMAGE_TAG=0.10
+export IMAGE_TAG=0.11
 
 export NUMBER_OF_IMAGES=100
 export NUMBER_OF_LAYERS=10

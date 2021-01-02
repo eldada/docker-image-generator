@@ -1,6 +1,5 @@
 FROM docker:dind
 
-
 # Copy run scripts
 COPY run*.sh /
 

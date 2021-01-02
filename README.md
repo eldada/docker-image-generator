@@ -84,7 +84,7 @@ It's possible to deploy the Docker image generator with the helm chart in [docke
 
 It's recommended to prepare a custom `values.yaml` file for each scenario with the custom `env` needed. See [values-example-1gb.yaml](docker-image-generator/values-example-1gb.yaml) as example.
 
-Be aware that the Job is set to run with `privileged: true`
+**IMPORTANT:** Be aware that the Job is set to run with `privileged: true`
 ```
 ...
     securityContext:
@@ -99,10 +99,10 @@ Example using the [values-example-1gb.yaml](docker-image-generator/values-exampl
 ```bash
 # Deploy
 cd docker-image-generator
-helm install --name data-gen -f values-example-1gb.yaml .
+helm install --upgrade data-gen -f values-example-1gb.yaml .
 
 # Remove once done
-helm delete --purge data-gen
+helm uninstall data-gen
 
 ```
 

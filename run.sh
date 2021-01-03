@@ -43,12 +43,14 @@ DOCKER_PID=$!
 disown ${DOCKER_PID}
 
 # Allow time for daemon to start
-sleep 5
+echo "Allowing time for docker daemon to come up"
+sleep 10
 
 # Check docker is working
-docker --version || exit 1
+docker ps > /dev/null 2>&1 || exit 1
 
 # Login to registry
+echo "Docker login to ${DOCKER_REGISTRY}"
 docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY} || exit 1
 
 # Calculate the loop size
@@ -59,7 +61,7 @@ echo "LOOP_SIZE is ${LOOP_SIZE}"
 echo "LOOP_REMAINDER is ${LOOP_REMAINDER}"
 
 # A random sleep for multiple replicas to be out of sync
-sleep $(( $RANDOM % 20 ))
+#sleep $(( $RANDOM % 20 ))
 
 # Create the Docker images
 if [ ${LOOP_SIZE} -gt 0 ]; then

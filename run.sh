@@ -46,9 +46,6 @@ disown ${DOCKER_PID}
 echo "Allowing time for docker daemon to come up"
 sleep 10
 
-# Check docker is working
-docker ps > /dev/null 2>&1 || exit 1
-
 # Login to registry
 echo "Docker login to ${DOCKER_REGISTRY}"
 docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY} || exit 1

@@ -41,13 +41,13 @@ docker build -t ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG} .
 
 ### Run Docker container
 You can run the Docker container directly on your Docker enabled host (needs the `--privileged` to work).<br>
-You can use the already built image `eldada-docker-examples.bintray.io/docker-data-generator:0.12`
+You can use the already built image `eldada.jfrog.io/docker/docker-data-generator:0.13`
 ```bash
 # Example for creating 100 images with 10 layers 1MB each and uploading to docker.artifactory/test
 # in 3 parallel sub processes (the 100 images are slit between the processes).
-export REGISTRY=eldada-docker-examples.bintray.io
+export REGISTRY=eldada.jfrog.io/docker
 export REPOSITORY=docker-data-generator
-export IMAGE_TAG=0.12
+export IMAGE_TAG=0.13
 
 export NUMBER_OF_IMAGES=100
 export NUMBER_OF_LAYERS=10
@@ -61,7 +61,6 @@ export DOCKER_PASSWORD=${YOUR_DOCKER_PASSWORD}
 export REPO_PATH=test
 export REMOVE_IMAGES=true
 export DEBUG=
-
 
 docker run --rm --name docker-data-gen \
     -e NUMBER_OF_IMAGES=${NUMBER_OF_IMAGES} \
@@ -106,5 +105,3 @@ helm install --upgrade data-gen -f values-example-1gb.yaml .
 helm uninstall data-gen
 
 ```
-
-

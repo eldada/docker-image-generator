@@ -1,0 +1,39 @@
+
+resources:
+  - name: docker_image_generator_repo
+    type: GitRepo
+    configuration:
+      gitProvider: EldadaGitHub
+      path: eldada/docker-image-generator
+      branches:
+        include: master
+
+pipelines:
+  - name: build_image_generator_docker_image
+
+    steps:
+      - name: step_1_docker_build
+        type: DockerBuild
+        configuration:
+          affinityGroup: dbp_group
+          dockerFileLocation: .
+          dockerFileName: Dockerfile
+          dockerImageName: eldada.jfrog.io/docker/docker-data-generator
+#          dockerImageTag: 0.${run_number}
+          dockerImageTag: 0.14
+          inputResources:
+            - name: docker_image_generator_repo
+          integrations:
+            - name: EldadaArtifactory
+
+      - name: step_2_docker_push
+        type: DockerPush
+        configuration:
+          affinityGroup: dbp_group
+          targetRepository: docker
+          integrations:
+            - name: EldadaArtifactory
+          inputSteps:
+            - name: step_1_docker_build
+          outputResources:
+            - name: dbp_image

@@ -20,7 +20,7 @@ pipelines:
           dockerFileName: Dockerfile
           dockerImageName: eldada.jfrog.io/docker/docker-data-generator
 #          dockerImageTag: 0.${run_number}
-          dockerImageTag: 0.14
+          dockerImageTag: "0.14"
           inputResources:
             - name: docker_image_generator_repo
           integrations:
@@ -35,5 +35,5 @@ pipelines:
             - name: EldadaArtifactory
           inputSteps:
             - name: step_1_docker_build
-          outputResources:
-            - name: dbp_image
+#          outputResources:
+#            - name: dbp_image

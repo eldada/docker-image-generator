@@ -4,7 +4,7 @@
 
 image:
   repository: eldada.jfrog.io/docker/docker-data-generator
-  tag: 0.13
+  tag: 0.14
   pullPolicy: Always
 
 env:

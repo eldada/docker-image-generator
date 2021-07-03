@@ -35,5 +35,3 @@ pipelines:
             - name: EldadaArtifactory
           inputSteps:
             - name: step_1_docker_build
-#          outputResources:
-#            - name: dbp_image

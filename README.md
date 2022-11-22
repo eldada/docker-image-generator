@@ -1,5 +1,5 @@
 # Docker Images Generator
-Generate randomly named Docker images made up of unique layers with a given layer size and number of layers (`layer size` X `number of layers` = `image total size`) and upload them to a Docker registry.
+Generate uniquely named Docker images made up of unique layers with a given layer size and number of layers (`layer size` X `number of layers` = `image total size`) and upload them to a Docker registry.
 
 The build and upload can run in parallel processes for increased load and saving time.
 
@@ -7,7 +7,7 @@ The build and upload can run in parallel processes for increased load and saving
 I use this to upload unique Docker images and load test my [Artifactory](https://jfrog.com/artifactory/) instance, which is also my Docker registry.
 
 ## Design
-The generator runs in a Docker container (based on `docker:dind`), generating images using pre-defined parameters and then uploads to the set Docker registry.
+The generator runs locally using your install Docker engine or in a Docker container (based on `docker:dind`), generating images using pre-defined parameters and then uploads to the set Docker registry.
 
 ## Variables
 The following environment variables are used to configure the execution
@@ -28,8 +28,8 @@ The following environment variables are used to configure the execution
 | `DEBUG`                 | Provide debug output (shell set -x)               | ``                              |
 
 ## Build Docker image
-Build the Docker image
-```bash
+Build the generator Docker image
+```shell
 export REGISTRY=
 export REPOSITORY=
 export IMAGE_TAG=
@@ -39,10 +39,19 @@ docker build -t ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG} .
 
 ## Running Generator 
 
-### Run Docker container
+### Run In Local Shell
+You can run the generator directly with your Docker engine
+1. Copy `env-template.sh` to `env.sh` (if not copied, it will be copied with its current values in the first run)
+2. Edit `env.sh` to adjust your configuration
+3. Run the script
+```shell
+./run-local.sh
+```
+
+### Run In A Docker container
 You can run the Docker container directly on your Docker enabled host (needs the `--privileged` to work).<br>
 You can use the already built image `eldada.jfrog.io/docker/docker-data-generator:0.16`
-```bash
+```shell
 # Example for creating 100 images with 10 layers 1MB each and uploading to docker.artifactory/test
 # in 3 parallel sub processes (the 100 images are slit between the processes).
 export REGISTRY=eldada.jfrog.io/docker
@@ -96,12 +105,11 @@ It's recommended to prepare a custom `values.yaml` file for each scenario with t
 **IMPORTANT:** The Job deployed in K8s is not removed after completed, so you'll need to remove a deployed release before deploying again
 
 Example using the [values-example-1gb.yaml](docker-image-generator/values-example-1gb.yaml) as custom parameters
-```bash
+```shell
 # Deploy
 cd docker-image-generator
 helm install --upgrade data-gen -f values-example-1gb.yaml .
 
 # Remove once done
 helm uninstall data-gen
-
 ```

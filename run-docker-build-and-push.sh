@@ -104,6 +104,6 @@ if [ "${REMOVE_IMAGES}" == true ]; then
 fi
 
 if [ "${ERROR}" == true ]; then
-    logger "ERRORS found"
+    logger "*********** ERRORS found ***********"
 fi
 logger "Completed"

@@ -7,7 +7,7 @@ The build and upload can run in parallel processes for increased load and saving
 I use this to upload unique Docker images and load test my [Artifactory](https://jfrog.com/artifactory/) instance, which is also my Docker registry.
 
 ## Design
-The generator runs locally using your install Docker engine or in a Docker container (based on `docker:dind`), generating images using pre-defined parameters and then uploads to the set Docker registry.
+The generator runs locally using your installed Docker engine or in a Docker container (based on `docker:dind`), generating images using pre-defined parameters and then uploads to the set Docker registry.
 
 ## Variables
 The following environment variables are used to configure the execution

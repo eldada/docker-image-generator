@@ -44,7 +44,7 @@ if [[ ! -f ./env.sh ]]; then
     echo
     echo "########################################################################"
     echo "# Creating initial env.sh from env-template.sh."
-    echo "# You should edit env.sh with your required configuration and run again."
+    echo "# Edit env.sh with the required configuration and run $0 again."
     echo "########################################################################"
     echo
     cp ./env-template.sh ./env.sh || errorExit "Copying ./env-template.sh to ./env.sh failed"

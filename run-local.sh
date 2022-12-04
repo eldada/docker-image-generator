@@ -41,8 +41,14 @@ START_TIME=$(date +'%s')
 
 # Load the configured environment variables
 if [[ ! -f ./env.sh ]]; then
-    echo "Creating initial env.sh from env-template.sh"
+    echo
+    echo "########################################################################"
+    echo "# Creating initial env.sh from env-template.sh."
+    echo "# You should edit env.sh with your required configuration and run again."
+    echo "########################################################################"
+    echo
     cp ./env-template.sh ./env.sh || errorExit "Copying ./env-template.sh to ./env.sh failed"
+    exit 0
 fi
 source ./env.sh || errorExit "Loading env.sh failed"
 

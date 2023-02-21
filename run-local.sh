@@ -87,9 +87,9 @@ END_TIME=$(date +'%s')
 ELAPSED_TIME=$((${END_TIME} - ${START_TIME}))
 
 echo "==============================================="
-echo "== Completed in ${ELAPSED_TIME} seconds"
-echo "== Created ${NUMBER_OF_IMAGES} images"
-echo "== Images with ${NUMBER_OF_LAYERS} layers"
-echo "== Layer size ${SIZE_OF_LAYER_KB} KB"
-echo "== Using ${NUM_OF_THREADS} threads"
+echo "== Completed in:          ${ELAPSED_TIME} seconds"
+echo "== Created:               ${NUMBER_OF_IMAGES} images"
+echo "== Each image with:       ${NUMBER_OF_LAYERS} layers"
+echo "== Layer size:            ${SIZE_OF_LAYER_KB} KB"
+echo "== Using:                 ${NUM_OF_THREADS} threads"
 echo "==============================================="
